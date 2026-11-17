@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seedance 视频生成评测方案 · 单文件设计报告 — 郑栩</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230a0a0c'/%3E%3Crect x='4' y='4' width='56' height='56' rx='6' fill='none' stroke='%23e86b2c' stroke-width='2.5'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='monospace' font-size='26' font-weight='700' fill='%23e86b2c'%3EZX%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --bg: #0a0a0c; --panel: #121216; --text: #f4f4f6; --muted: #8b8b98; --sub: #b6b6c2;
+      --border: rgba(255,255,255,0.09); --accent: #e86b2c; --accent-soft: rgba(232,107,44,0.12);
+      --serif: Georgia, "Noto Serif SC", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; background: rgba(10,10,12,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+    .back-link { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.12em; }
+    .cover-toggle { font-family: var(--mono); font-size: 11px; color: var(--sub); background: transparent; border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    .layout { max-width: 1200px; margin: 0 auto; padding: 48px 28px 88px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; }
+    .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 12px; }
+    h1 { font-family: var(--serif); font-size: clamp(30px, 4vw, 46px); font-weight: 400; line-height: 1.2; margin: 0 0 18px 0; }
+    .lead { color: var(--sub); font-size: 16px; margin: 0 0 28px 0; }
+    .notice-banner { background: var(--accent-soft); border: 1px solid rgba(232,107,44,0.45); padding: 16px 20px; border-radius: 6px; margin-bottom: 36px; font-size: 14px; }
+    .notice-banner strong { color: var(--accent); }
+    .sec { border-top: 1px solid var(--border); padding: 36px 0; }
+    .sec-tag { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.16em; }
+    .sec h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; margin: 8px 0 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 18px; }
+    .card .val { font-family: var(--serif); font-size: 28px; color: var(--text); }
+    .card .lbl { font-size: 13px; color: var(--accent); margin-top: 4px; }
+    .card .note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .dim-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .rail { position: sticky; top: 82px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .rail h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent); margin: 0 0 14px; }
+    .rail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .rail-row span:first-child { color: var(--muted); }
+    .src-list { margin: 18px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--sub); display: flex; flex-direction: column; gap: 10px; }
+    .src-list code { color: var(--accent); font-family: var(--mono); }
+    .blueprint-box { display: none; background: #0d1016; border: 1px dashed rgba(232,107,44,0.45); padding: 22px; border-radius: 6px; margin-bottom: 24px; font-family: var(--mono); font-size: 12px; color: var(--sub); }
+    body.mode-blueprint .blueprint-box { display: block; }
+    @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .rail { position: static; } .grid-3, .dim-list { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html#knowledge" class="back-link">← 返回郑栩作品集</a>
+    <button class="cover-toggle" id="cover-toggle" type="button">切换视图：标准 / 蓝图</button>
+  </header>
+
+  <main class="layout">
+    <div>
+      <div class="eyebrow">SINGLE-FILE REPORT · DESIGN SPECIFICATION</div>
+      <h1 id="rpt-title"></h1>
+      <p class="lead" id="rpt-subtitle"></p>
+
+      <div class="blueprint-box" id="blueprint-box">
+        [BLUEPRINT MODE] 只读取 window.RPT 与 window.SRC · 宁可缺省，不可编造 · 本文件零外部请求
+      </div>
+
+      <div class="notice-banner">
+        <strong>诚实边界声明：</strong>本报告为评测设计方案文档，<strong>24 条小样本双盲试跑目前待执行</strong>，尚未产出任何实测模型得分或胜率排名。
+      </div>
+
+      <section class="sec">
+        <span class="sec-tag">§00 · 方案规模总览</span>
+        <h2>核心设计参数</h2>
+        <div class="grid-3" id="kpi-grid"></div>
+      </section>
+
+      <section class="sec">
+        <span class="sec-tag">§01 · 六维评估体系</span>
+        <h2>覆盖维度设计（120 条标准集）</h2>
+        <div class="dim-list" id="dim-grid"></div>
+      </section>
+
+      <section class="sec">
+        <span class="sec-tag">§02 · 双盲试跑协议</span>
+        <h2>24 条小样本双盲试跑计划（待执行）</h2>
+        <div class="card">
+          <p style="margin:0; font-size:14px; color:var(--sub);" id="pilot-plan"></p>
+        </div>
+      </section>
+    </div>
+
+    <aside class="rail">
+      <h3>REPORT TELEMETRY · 实时口径</h3>
+      <div id="rail-rows"></div>
+      <h3 style="margin-top:22px;">SOURCES · 信源登记</h3>
+      <ul class="src-list" id="src-list"></ul>
+    </aside>
+  </main>
+
+  <script>
+    // 只读取 window.RPT；宁可缺省，不可编造
+    window.RPT = {
+      title: "Seedance 视频生成评测方案",
+      subtitle: "面向视频生成质量与指令遵循的六维评测框架、120 条标准集结构与 24 条双盲试跑计划（设计方案）。",
+      kpis: [
+        { val: "6 个维度", lbl: "评估维度体系", note: "设计方案口径 [K1]" },
+        { val: "120 条", lbl: "标准测试集规划", note: "全量测试集规划规模 [K1]" },
+        { val: "24 条", lbl: "小样本双盲试跑", note: "状态：待执行，非已跑完实测 [K2]" },
+      ],
+      dimensions: [
+        { name: "01 · 提示词指令遵循", desc: "主体、动作、镜头指令与场景元素是否完整响应。" },
+        { name: "02 · 时序一致性与闪烁", desc: "多帧之间人物外貌、物体轮廓与光照稳定性。" },
+        { name: "03 · 物理合理性", desc: "重力、碰撞、肢体运动及物体交互是否违背常识。" },
+        { name: "04 · 画面美学与构图", desc: "光影层次、景别控制与画面清晰度表现。" },
+        { name: "05 · 运动幅度与流畅度", desc: "动态节奏自然度，避免抽搐或静止伪影。" },
+        { name: "06 · 安全与边界合规", desc: "敏感内容规避与异常畸变风险拦截。" },
+      ],
+      pilotPlan: "在 120 条标准测试集全量运行前，先抽取 24 条代表性样本进行双盲试跑（隐藏模型来源标签），用于校准不同评审员在六维尺度上的一致性。当前 24 条双盲试跑处于待执行状态。",
+      telemetry: [
+        ["文档状态", "设计方案（待执行）"],
+        ["标准集规模", "120 条规划"],
+        ["双盲试跑", "24 条（待执行）"],
+        ["网络请求", "0 后端请求"],
+      ],
+    };
+
+    window.SRC = [
+      { id: "K1", text: "郑栩 Seedance 视频生成评测设计方案（六维 + 120 条标准集）" },
+      { id: "K2", text: "小样本校准计划：24 条双盲试跑待执行（无已验证实测分数）" },
+    ];
+
+    (function () {
+      document.getElementById("rpt-title").textContent = window.RPT.title;
+      document.getElementById("rpt-subtitle").textContent = window.RPT.subtitle;
+      document.getElementById("pilot-plan").textContent = window.RPT.pilotPlan;
+      document.getElementById("kpi-grid").innerHTML = window.RPT.kpis.map(k => `
+        <div class="card"><div class="val">${k.val}</div><div class="lbl">${k.lbl}</div><div class="note">${k.note}</div></div>
+      `).join("");
+      document.getElementById("dim-grid").innerHTML = window.RPT.dimensions.map(d => `
+        <div class="card"><strong style="font-size:15px;">${d.name}</strong><p style="margin:8px 0 0; font-size:13px; color:var(--sub);">${d.desc}</p></div>
+      `).join("");
+      document.getElementById("rail-rows").innerHTML = window.RPT.telemetry.map(r => `
+        <div class="rail-row"><span>${r[0]}</span><span>${r[1]}</span></div>
+      `).join("");
+      document.getElementById("src-list").innerHTML = window.SRC.map(s => `
+        <li><code>[${s.id}]</code> ${s.text}</li>
+      `).join("");
+
+      const toggleBtn = document.getElementById("cover-toggle");
+      const saved = localStorage.getItem("zx-spec-cover-mode");
+      if (saved === "blueprint") document.body.classList.add("mode-blueprint");
+      toggleBtn.addEventListener("click", () => {
+        const isBp = document.body.classList.toggle("mode-blueprint");
+        localStorage.setItem("zx-spec-cover-mode", isBp ? "blueprint" : "standard");
+      });
+    })();
+  </script>
+</body>
+</html>

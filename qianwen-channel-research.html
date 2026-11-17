@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>千问办公渠道调研 · DRACO 案头报告 — 郑栩</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%230a0a0c'/%3E%3Crect x='4' y='4' width='56' height='56' rx='6' fill='none' stroke='%23e86b2c' stroke-width='2.5'/%3E%3Ctext x='32' y='41' text-anchor='middle' font-family='monospace' font-size='26' font-weight='700' fill='%23e86b2c'%3EZX%3C/text%3E%3C/svg%3E" />
+  <style>
+    :root {
+      --bg: #0a0a0c; --panel: #121216; --text: #f4f4f6; --muted: #8b8b98; --sub: #b6b6c2;
+      --border: rgba(255,255,255,0.09); --accent: #e86b2c; --accent-soft: rgba(232,107,44,0.12);
+      --serif: Georgia, "Noto Serif SC", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      --mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: 14px 28px; background: rgba(10,10,12,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border); }
+    .back-link { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: 0.12em; }
+    .layout { max-width: 1200px; margin: 0 auto; padding: 48px 28px 88px; display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 40px; align-items: start; }
+    .eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; color: var(--accent); margin-bottom: 12px; }
+    h1 { font-family: var(--serif); font-size: clamp(30px, 4vw, 46px); font-weight: 400; line-height: 1.2; margin: 0 0 18px 0; }
+    .lead { color: var(--sub); font-size: 16px; margin: 0 0 28px 0; }
+    .notice-banner { background: var(--accent-soft); border: 1px solid rgba(232,107,44,0.45); padding: 16px 20px; border-radius: 6px; margin-bottom: 36px; font-size: 14px; }
+    .notice-banner strong { color: var(--accent); }
+    .sec { border-top: 1px solid var(--border); padding: 36px 0; }
+    .sec-tag { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.16em; }
+    .sec h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; margin: 8px 0 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 18px; }
+    .card .val { font-family: var(--serif); font-size: 28px; color: var(--text); }
+    .card .lbl { font-size: 13px; color: var(--accent); margin-top: 4px; }
+    .card .note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .draco-stack { display: flex; flex-direction: column; gap: 12px; }
+    .rail { position: sticky; top: 82px; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+    .rail h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; color: var(--accent); margin: 0 0 14px; }
+    .rail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .rail-row span:first-child { color: var(--muted); }
+    .src-list { margin: 18px 0 0; padding: 0; list-style: none; font-size: 12px; color: var(--sub); display: flex; flex-direction: column; gap: 10px; }
+    .src-list code { color: var(--accent); font-family: var(--mono); }
+    @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } .rail { position: static; } .grid-3 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a href="index.html#knowledge" class="back-link">← 返回郑栩作品集</a>
+    <span style="font-family:var(--mono); font-size:11px; color:var(--muted);">DESK RESEARCH ONLY</span>
+  </header>
+
+  <main class="layout">
+    <div>
+      <div class="eyebrow">SINGLE-FILE REPORT · DESK RESEARCH</div>
+      <h1 id="rpt-title"></h1>
+      <p class="lead" id="rpt-subtitle"></p>
+
+      <div class="notice-banner">
+        <strong>口径声明：</strong>本研究为借用 DRACO 框架开展的<strong>纯案头调研</strong>（10 个 AI 办公产品、30 条渠道资料库），<strong>不是渠道实测投放</strong>，不含投放 ROI 或真实转化数据。
+      </div>
+
+      <section class="sec">
+        <span class="sec-tag">§00 · 调研样本规模</span>
+        <h2>资料库覆盖口径</h2>
+        <div class="grid-3" id="kpi-grid"></div>
+      </section>
+
+      <section class="sec">
+        <span class="sec-tag">§01 · DRACO 分析维度</span>
+        <h2>渠道拆解框架结构</h2>
+        <div class="draco-stack" id="draco-list"></div>
+      </section>
+    </div>
+
+    <aside class="rail">
+      <h3>REPORT TELEMETRY · 调研口径</h3>
+      <div id="rail-rows"></div>
+      <h3 style="margin-top:22px;">SOURCES · 信源登记</h3>
+      <ul class="src-list" id="src-list"></ul>
+    </aside>
+  </main>
+
+  <script>
+    // 只读取 window.RPT；宁可缺省，不可编造
+    window.RPT = {
+      title: "千问办公渠道调研 · DRACO 资料库",
+      subtitle: "面向 AI 办公产品的横向分发渠道案头拆解：覆盖 10 个代表性 AI 办公产品，沉淀 30 条结构化渠道资料库。",
+      kpis: [
+        { val: "10 个产品", lbl: "AI 办公竞品样本", note: "公开渠道案头梳理 [K1]" },
+        { val: "30 条", lbl: "渠道资料库条目", note: "结构化字段沉淀 [K1]" },
+        { val: "DRACO", lbl: "借用分析框架", note: "案头调研，非实测投放 [K2]" },
+      ],
+      draco: [
+        { code: "D · Distribution", desc: "梳理核心分发入口：浏览器插件市场、桌面客户端、内容社区与企业协作集成。" },
+        { code: "R · Reach / Retention", desc: "识别用户触达频次与从单次试用转化为高频办公流的前提条件。" },
+        { code: "A · Activation", desc: "拆解首次体验触发动作与模板引导路径（案头公开资料观察）。" },
+        { code: "C · Conversion Context", desc: "记录免费试用、个人订阅与团队协同的切分边界。" },
+        { code: "O · Ecosystem Leverage", desc: "归纳各产品如何借助既有文档/会议/知识库生态降低冷启动摩擦。" },
+      ],
+      telemetry: [
+        ["研究性质", "纯案头调研"],
+        ["产品样本", "10 个 AI 办公产品"],
+        ["资料库规模", "30 条渠道条目"],
+        ["实测投放", "无（非渠道实测）"],
+      ],
+    };
+
+    window.SRC = [
+      { id: "K1", text: "千问办公渠道案头调研库（10 产品 × 30 条渠道条目）" },
+      { id: "K2", text: "方法说明：借用 DRACO 框架进行公开信息梳理，非投放实验" },
+    ];
+
+    (function () {
+      document.getElementById("rpt-title").textContent = window.RPT.title;
+      document.getElementById("rpt-subtitle").textContent = window.RPT.subtitle;
+      document.getElementById("kpi-grid").innerHTML = window.RPT.kpis.map(k => `
+        <div class="card"><div class="val">${k.val}</div><div class="lbl">${k.lbl}</div><div class="note">${k.note}</div></div>
+      `).join("");
+      document.getElementById("draco-list").innerHTML = window.RPT.draco.map(d => `
+        <div class="card"><strong style="font-family:var(--mono); color:var(--accent); font-size:13px;">${d.code}</strong><p style="margin:6px 0 0; font-size:14px; color:var(--sub);">${d.desc}</p></div>
+      `).join("");
+      document.getElementById("rail-rows").innerHTML = window.RPT.telemetry.map(r => `
+        <div class="rail-row"><span>${r[0]}</span><span>${r[1]}</span></div>
+      `).join("");
+      document.getElementById("src-list").innerHTML = window.SRC.map(s => `
+        <li><code>[${s.id}]</code> ${s.text}</li>
+      `).join("");
+    })();
+  </script>
+</body>
+</html>
